@@ -47,17 +47,29 @@ export const UserRegisterForm = ({ }: UserAuthFormProps) => {
         'Access-Control-Allow-Methods': '*',
         'Access-Control-Allow-Headers': '*'
       },
-      credentials: "include",
       body: JSON.stringify(data)
-    }).then(() => {
-      toast.success("Account created successfully");
-      setSuccess(true);
-    }).catch((error) => {
-      const errData = error.response.data as HttpErrorResponse;
-      setErrors(errData);
-    }).finally(() => {
+    }).then((result) => {
+      console.log(result)
+      if (result.status == 200) {
+        toast.success("Account created successfully");
+        setSuccess(true);
+      }
+      else if (result.status == 422) {
+        let errors: HttpErrorResponse = {
+          message: "input is wrong",
+          status: result.status,
+        };
+        setErrors(errors)
+      }
+      else {
+        let errors: HttpErrorResponse = {
+          message: "email is already using",
+          status: result.status,
+        };
+        setErrors(errors)
+      }
       setIsLoading(false);
-    });
+    })
 
   }
 

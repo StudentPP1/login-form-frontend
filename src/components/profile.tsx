@@ -42,24 +42,6 @@ export default function Profile() {
 
         <UpdatePasswordForm />
         <Separator />
-
-        <h2 className="text-lg font-semibold mb-2">Connected Accounts</h2>
-        <div className="flex flex-col gap-y-2">
-          {user?.connectedAccounts.map((account) => (
-            <div className="flex w-full max-w-screen-sm justify-between">
-              <div className="flex items-center gap-x-2">
-                {getProviderIcon(account.provider)}
-                <span className="font-bold">{account.provider}</span>
-              </div>
-              <span className="text-muted-foreground">
-                Connected at:{" "}
-                <span className="text-foreground font-semibold">
-                  {format(new Date(account.connectedAt), "MMM dd, hh:mm")}
-                </span>
-              </span>
-            </div>
-          ))}
-        </div>
       </div>
     </div>
     </>

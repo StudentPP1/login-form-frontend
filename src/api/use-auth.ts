@@ -65,8 +65,27 @@ export const useAuthGuard = ({
         password: props.password,
       }),
     })
-      .then(() => mutate())
+      .then((response) => {
+        if (response.status == 200) {
+          mutate()
+        }
+        else if (response.status == 422) {
+          let errors: HttpErrorResponse = {
+            message: "input is wrong",
+            status: response.status,
+          };
+          onError(errors);
+        }
+        else {
+          let errors: HttpErrorResponse = {
+            message: "email not found",
+            status: response.status,
+          };
+          onError(errors);
+        }
+      })
       .catch((err) => {
+        console.log(err)
         const errors = err.response.data as HttpErrorResponse;
         onError(errors);
       });

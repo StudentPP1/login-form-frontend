@@ -1,6 +1,6 @@
 
 import { Link } from "react-router-dom";
-import { UserAuthForm } from "./forms/user-auth-form";
+import { UserAuthForm } from "./forms/auth-form";
 import { NavBar } from "./navbar/navbar";
 
 export const Login = () => {

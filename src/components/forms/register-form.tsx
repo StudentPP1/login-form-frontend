@@ -6,13 +6,12 @@ import { Input } from "@/components/ui/input"
 import { HttpErrorResponse } from "@/models/http/HttpErrorResponse"
 import React from "react"
 import { toast } from "sonner";
-import httpClient from "@/api/httpClient"
-import SuccessFeedback from "@/utils/success-feedback"
+import SuccessFeedback from "@/components/utils/success-feedback"
 import { Link } from "react-router-dom"
-import ErrorFeedback from "@/utils/error-feedback"
+import ErrorFeedback from "@/components/utils/error-feedback"
 import { Label } from "../ui/label"
 
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 const registerSchema = z
   .object({
@@ -29,30 +28,37 @@ const registerSchema = z
 
 type Schema = z.infer<typeof registerSchema>;
 
-export const UserRegisterForm = ({}: UserAuthFormProps) => {
+export const UserRegisterForm = ({ }: UserAuthFormProps) => {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [success, setSuccess] = React.useState<boolean>(false);
   const [errors, setErrors] = React.useState<HttpErrorResponse | undefined>(
     undefined
   );
-  
-  function onSubmit(data: z.infer<typeof registerSchema>) {
+
+  async function onSubmit(data: z.infer<typeof registerSchema>) {
     setErrors(undefined);
     setSuccess(false);
     setIsLoading(true);
-    httpClient
-      .post("/api/users", data)
-      .then(() => {
-        toast.success("Account created successfully");
-        setSuccess(true);
-      })
-      .catch((error) => {
-        const errData = error.response.data as HttpErrorResponse;
-        setErrors(errData);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    await fetch(import.meta.env.VITE_BACKEND_URL + "/api/users", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': '*',
+        'Access-Control-Allow-Headers': '*'
+      },
+      credentials: "include",
+      body: JSON.stringify(data)
+    }).then(() => {
+      toast.success("Account created successfully");
+      setSuccess(true);
+    }).catch((error) => {
+      const errData = error.response.data as HttpErrorResponse;
+      setErrors(errData);
+    }).finally(() => {
+      setIsLoading(false);
+    });
+
   }
 
   const { register, handleSubmit, formState } = useForm<Schema>({
@@ -72,7 +78,7 @@ export const UserRegisterForm = ({}: UserAuthFormProps) => {
           </Link>
         }
       />
-      
+
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid gap-2">
           <div className="grid gap-2">

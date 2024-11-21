@@ -1,4 +1,3 @@
-import { useEffect } from "react"
 import ForgotPasswordPage from "./components/forgot-password"
 import { Home } from "./components/home"
 import { Login } from "./components/login"

@@ -1,9 +1,7 @@
 import { useAuthGuard } from "@/api/use-auth";
-import { FaGithub, FaGoogle } from "react-icons/fa";
 import Loading from "./utils/loading";
 import { NavBar } from "./navbar/navbar";
 import { Separator } from "./ui/separator";
-import { format } from "date-fns"
 import UpdateBasicDetailsForm from "./profile-details/update-basic-details-form";
 import UpdatePasswordForm from "./profile-details/update-password-form";
 import UpdateProfileImageForm from "./profile-details/update-profile-image-form";
@@ -12,17 +10,6 @@ export default function Profile() {
   const { user } = useAuthGuard({ middleware: "auth" });
 
   console.log(user)
-  
-  const getProviderIcon = (provider: string) => {
-    switch (provider) {
-      case "google":
-        return <FaGoogle />;
-      case "github":
-        return <FaGithub />;
-      default:
-        return <span>{provider}</span>;
-    }
-  };
 
   if (!user) return <Loading />;
 
